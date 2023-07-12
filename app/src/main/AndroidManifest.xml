@@ -13,6 +13,9 @@
         android:theme="@style/Theme.SongList"
         tools:targetApi="31">
         <activity
+            android:name=".UpdateActivity"
+            android:exported="false" />
+        <activity
             android:name=".DisplaySong"
             android:exported="false" />
         <activity
