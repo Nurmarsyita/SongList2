@@ -52,13 +52,13 @@ public class MainActivity extends AppCompatActivity {
 
                 if (checkedStars == R.id.star1){
                     insertStar += 1;
-                } else if (checkedStars == R.id.star2){
+                } else if (checkedStars == R.id.star2) {
                     insertStar += 2;
-                } else if (checkedStars == R.id.star3){
+                } else if (checkedStars == R.id.star3) {
                     insertStar += 3;
-                } else if (checkedStars == R.id.star4){
+                } else if (checkedStars == R.id.star4) {
                     insertStar += 4;
-                } else if (checkedStars == R.id.star5){
+                } else if (checkedStars == R.id.star5) {
                     insertStar += 5;
                 }
                 //insert into data
