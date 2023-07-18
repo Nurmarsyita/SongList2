@@ -13,7 +13,7 @@ public class Songs implements Serializable {
 
     public Songs(int id, String title, String singers, int year, int stars) {
         this.id = id;
-        this.title =title;
+        this.title = title;
         this.singers = singers;
         this.years = year;
         this.stars=stars;
@@ -48,7 +48,15 @@ public class Songs implements Serializable {
     @NonNull
     @Override
     public String toString() {
-        return "\nTitle: " + title + "\nSingers: " + singers + "\nYears: " + years + "\nStars: " + stars;
+        return "\n" + title + "\n" + singers + "\n" + years + "\n" + stars;
+    }
+
+    public String starsShow() {
+        StringBuilder starBuilder = new StringBuilder();
+        for (int i = 0; i < stars; i++) {
+            starBuilder.append("* ");
+        }
+        return starBuilder.toString().trim();
     }
 
 }

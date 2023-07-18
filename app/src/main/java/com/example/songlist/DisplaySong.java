@@ -16,9 +16,10 @@ import java.util.ArrayList;
 public class DisplaySong extends AppCompatActivity {
 
     ListView lv;
-    ArrayList<Songs> al;
-    ArrayAdapter aa;
+    ArrayList<Songs> alSongs;
+    ArrayList<Songs> filteredSongList;
     Button btn5Stars;
+    CustomAdapter adapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -28,20 +29,17 @@ public class DisplaySong extends AppCompatActivity {
         lv = findViewById(R.id.lv);
         btn5Stars = findViewById(R.id.btn5Stars);
 
-        al = new ArrayList<Songs>();
-        aa = new ArrayAdapter<Songs>(this,
-                android.R.layout.simple_list_item_1, al);
-        lv.setAdapter(aa);
+        DBHelper db = new DBHelper(DisplaySong.this);
+        alSongs = db.getSongs();
+        db.close();
 
-        DBHelper dbh = new DBHelper(DisplaySong.this);
-        al.clear();
-        al.addAll(dbh.getSongs());
-        aa.notifyDataSetChanged();
+        adapter = new CustomAdapter(this, R.layout.row, alSongs);
+        lv.setAdapter(adapter);
 
         lv.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                Songs target = al.get(position);
+                Songs target = alSongs.get(position);
 
                 Intent intent = new Intent(DisplaySong.this, UpdateActivity.class);
                 intent.putExtra("data", target);
@@ -53,22 +51,42 @@ public class DisplaySong extends AppCompatActivity {
             @Override
             public void onClick(View v) {
 
-                DBHelper dbh = new DBHelper(DisplaySong.this);
-                al.clear();
-                int filterText = 5;
-                al.addAll(dbh.getSongsStar(filterText));
+                filteredSongList = new ArrayList<>();
+                for (int i = 0; i < alSongs.size(); i++) {
+                    if (alSongs.get(i).getStars() == 5) {
+                        filteredSongList.add(alSongs.get(i));
+                    }
+                }
 
-                aa.notifyDataSetChanged();
+                adapter = new CustomAdapter(DisplaySong.this, R.layout.row, filteredSongList);
+                lv.setAdapter(adapter);
             }
         });
     }
-        @Override
+
+    @Override
     protected void onResume() {
         super.onResume();
 
         DBHelper dbh = new DBHelper(DisplaySong.this);
-        al.clear();
-        al.addAll(dbh.getSongs());
-        aa.notifyDataSetChanged();
+        alSongs.clear();
+        alSongs.addAll(dbh.getSongs());
+//        aaSong.notifyDataSetChanged();
+
+        if (btn5Stars.isActivated()) {
+            filteredSongList = new ArrayList<>();
+            for (int i = 0; i < alSongs.size(); i++) {
+                if (alSongs.get(i).getStars() == 5) {
+                    filteredSongList.add(alSongs.get(i));
+                }
+            }
+            adapter = new CustomAdapter(DisplaySong.this, R.layout.row, filteredSongList);
+            lv.setAdapter(adapter);
+        } else {
+            adapter = new CustomAdapter(DisplaySong.this, R.layout.row, alSongs);
+            lv.setAdapter(adapter);
+        }
+
+        adapter.notifyDataSetChanged();
     }
 }
